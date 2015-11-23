@@ -1,0 +1,32 @@
+{
+  "name": "fs-comprehensions",
+  "version": "0.0.1",
+  "description": "Add comprehensions API to file system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilinkuo/fs-comprehensions.git"
+  },
+  "keywords": [
+    "file",
+    "system",
+    "comprehensions",
+    "array",
+    "map",
+    "filter",
+    "forEach",
+    "algebraic",
+    "data",
+    "structure",
+    "directory"
+  ],
+  "author": "I-Lin Kuo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ilinkuo/fs-comprehensions/issues"
+  },
+  "homepage": "https://github.com/ilinkuo/fs-comprehensions#readme"
+}
