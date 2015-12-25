@@ -69,14 +69,25 @@ function depthFirstTraversal(dir, handlers, depth){
  
     // Apply filters and sorts
     var items = fs.readdirSync(dir);
-    handlersCopy.filter && (items = items.filter(handlersCopy.filter));
+    if (handlersCopy.filter) {
+        // console.log("filtering depth=" + depth);
+        items = items.filter(function(item){
+            // console.log(item, handlersCopy.filter(item, depth))
+            return handlersCopy.filter(item, depth);
+        });
+    }
+    // console.log(items);
     handlersCopy.sort && (items = items.sort(handlersCopy.sort));
- 
+    
+    // Do preorder traversal action
+    if (handlers.order !== 'post'){
+        handlersCopy.onDir(dir, null, depth, handlersCopy.acc);
+    }
     items.forEach( function(item, index){
        var isDir = isDirectory(item, dir);
        if (isDir){ // is a directory
            if (handlers.order === 'post'){ // post-order traveral
-              depthFirstTraversal(makeFullPath(item, dir), handlersCopy, depth + 1);
+               depthFirstTraversal(makeFullPath(item, dir), handlersCopy, depth + 1);
                handlersCopy.onDir(item, dir, depth + 1, handlersCopy.acc);
            } else { // pre-order traversal
                handlersCopy.onDir(item, dir, depth + 1, handlersCopy.acc);
@@ -86,6 +97,10 @@ function depthFirstTraversal(dir, handlers, depth){
            handlersCopy.onFile(item, dir, depth + 1, handlersCopy.acc);
        }
     });
+    // Do postorder traversal action
+    if (handlers.order === 'post'){
+        handlersCopy.onDir(dir, null, depth, handlersCopy.acc);
+    }
 }
  
  
@@ -93,14 +108,14 @@ function depthFirstTraversal(dir, handlers, depth){
 var SPACES = '                                        '; // This limits the indentation depth
 var DRY_RUN = {
     onFile: function(file, parent, depth){
-        console.log(SPACES.substr(0, 2 * depth) + 'FILE: ' + file);
+        console.log(SPACES.substr(0, 2 * depth) + 'FILE(' + depth + '): ' + file);
     },
     onDir: function(dir, parent, depth, acc){
         var fPath = makeFullPath(dir, parent);
         if (dir === 'java') {
             acc.push(fPath);
         }
-        console.log(SPACES.substr(0, 2 * depth) + 'DIR: ' + fPath );
+        console.log(SPACES.substr(0, 2 * depth) + 'DIR(' + depth + '): ' + fPath );
         //console.log(SPACES.substr(0, 2 * depth) + path.resolve(fPath));
         if (hasJavaFiles(fPath)){
             console.log(SPACES.substr(0, 2 * depth) + 'PACKAGE: ' + asJavaPackage(fPath, acc) );
@@ -117,13 +132,39 @@ depthFirstTraversal(dirArg, DRY_RUN);
  
 console.log('\n======\nDONE!\n======\n\n');
 
-function fsc(dir){
+function File(item, parent){
+    // TODO: use prototype
+    return {
+        isDirectory: function(){
+            return false;
+        },
+        parent: parent,
+        toString: function(){
+            return item;
+        }
+    }
+}
+
+function Directory(item, parent){
+    // TODO: use prototype
+    return {
+        isDirectory: function(){
+            return true;
+        },
+        parent: parent,
+        toString: function(){
+            return item;
+        }
+    }
+}
+
+function directory(dir){
     function wrap(callback){
         return function(dir, parent, depth, acc){
             callback(dir, depth)
         };
     }
-
+    var settings = {}
     return {
         forEach: function(callback){
             depthFirstTraversal(dir, {
@@ -136,14 +177,14 @@ function fsc(dir){
                 onFile: wrap(callbacks.file),
                 onDir: wrap(callbacks.dir)
             })
+        },
+        filter: function(filter){
+
         }
     }
 }
 
-var cb = function(dirOrFile, depth){
-    console.log(' '.repeat(depth) + dirOrFile);
-}
+directory.depthFirstTraversal = depthFirstTraversal;
+directory.DRY_RUN = DRY_RUN;
 
-// fsc('..').forEach(cb)
-
-fsc('..').for({dir: cb, file: cb})
+module.exports = directory;
