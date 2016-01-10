@@ -1,18 +1,18 @@
-var directory = require('./index.js');
+var dir = require('./index.js');
 
-// var cb = function(dirOrFile, depth){
-//     console.log(' '.repeat(depth * 2) + dirOrFile);
-// }
 
-// directory('..').forEach(function(dirOrFile, depth){
-//     console.log(' '.repeat(depth * 2) + dirOrFile);
-// });
-console.log(directory.DRY_RUN);
-var DRY_RUN = directory.DRY_RUN;
-DRY_RUN.filter = function(elmt, depth){
-	return depth < 3;
+var cb = function(dirOrFile, depth){
+    console.log(' '.repeat(depth * 2) + dirOrFile);
 }
 
-directory.depthFirstTraversal('..', DRY_RUN);
 
-// directory('..').for({dir: cb, file: cb});
+console.log('EXAMPLE 1: Print out all the files in a directory');
+dir('..').forEach(function(dirOrFile, depth){
+    console.log( dirOrFile);
+});
+
+console.log('EXAMPLE 2: Print out all the files in a directory with indentation');
+dir('..').forEach(function(dirOrFile, depth){
+    console.log(' '.repeat(depth * 2) + dirOrFile);
+});
+
