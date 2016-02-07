@@ -1,7 +1,7 @@
 # array-dir
 Add comprehensions API to the file system 
 
-As a JavaScripter, do you know how to:
+Off the top of your head, do you know how to use JavaScript to:
 * Print out all the files in a directory?
 * Print out all the JavaScript files in a directory?
 * Print out all the files in a directory in alphabetical order?
@@ -13,8 +13,7 @@ If the answer to any of these is 'no', then ask yourself why don't you know? Usu
 
 To see how important the second reason is, let me ask the original questions again, but this time with an additional condition.
 
-As a JavaScripter, if I gave you an array of all the files in a directory, would you know how to:
-
+Off the top of your head, if I gave you an array of all the files in a directory, would you know how to use JavaScript to:
 * Print out all the files in a directory?
 * Print out all the JavaScript files in a directory?
 * Print out all the files in a directory in alphabetical order?

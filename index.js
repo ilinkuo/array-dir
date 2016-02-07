@@ -47,7 +47,8 @@ function asJavaPackage(dir, roots){
 	return result;
 }
  
- 
+
+
 /**
 	Traverses the directory in a nominally depth-first recursion (if synchronous)
 	@params handlers = {
@@ -67,9 +68,8 @@ function depthFirstTraversal(dir, handlers, depth){
 	handlersCopy.onDir = handlersCopy.onDir || NOOP;
 	handlersCopy.onFile = handlersCopy.onFile || NOOP;
  
-	// Apply filters and sorts
+	// Apply filters first
 	var items = fs.readdirSync(dir);
-	// replace by a map
 	if (handlersCopy.filter) {
 		// console.log("filtering depth=" + depth);
 		items = items.filter(function(item){
@@ -78,6 +78,7 @@ function depthFirstTraversal(dir, handlers, depth){
 		});
 	}
 
+	// Apply sorts second
 	handlersCopy.sort && (items = items.sort(handlersCopy.sort));
 	
 	// Do preorder traversal action by default
@@ -127,11 +128,9 @@ var DRY_RUN = {
 };
  
 DRY_RUN.acc = [];
-depthFirstTraversal(dirArg, DRY_RUN);
 
-
- 
-console.log('\n======\nDONE!\n======\n\n');
+// depthFirstTraversal(dirArg, DRY_RUN);
+// console.log('\n======\nDONE!\n======\n\n');
 
 function File(item, parent){
 	// TODO: use prototype
